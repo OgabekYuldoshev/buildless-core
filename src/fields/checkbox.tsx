@@ -25,7 +25,7 @@ export function CheckboxRender({ label, options }: CheckboxProps) {
           <CheckboxBase value="placeholder" disabled>No options</CheckboxBase>
         ) : (
           options.map((option) => (
-            <CheckboxBase key={option.value} value={option.value}>{option.label}</CheckboxBase>
+            <CheckboxBase key={option.value} value={option.value} disabled >{option.label}</CheckboxBase>
           ))
         )}
       </div>

@@ -19,7 +19,7 @@ export function InputRender({ label, placeholder }: InputProps) {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
-      <InputBase id={label} placeholder={placeholder} />
+      <InputBase id={label} placeholder={placeholder} disabled />
     </div>
   )
 }

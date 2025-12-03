@@ -283,18 +283,11 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
         <div
             ref={elementRef}
             className={cn(
-                "border p-4 rounded-lg flex flex-col gap-3 bg-background cursor-grab transition-shadow relative",
+                "border p-4 rounded-lg gap-3 bg-background cursor-grab transition-shadow relative hover:ring-2 hover:ring-primary/60",
                 isDragging && "shadow-lg ring-2 ring-primary/60 opacity-80"
             )}
         >
-            <div className="flex items-start gap-4">
-                <Button size="icon-sm" variant="outline" className='shrink-0'>
-                    <GripHorizontalIcon />
-                </Button>
-                <div className='flex-1'>
-                    {children}
-                </div>
-            </div>
+            {children}
             {closestEdge && (
                 <DropIndicator
                     edge={closestEdge}
@@ -303,5 +296,6 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
                 />
             )}
         </div>
+
     )
 })

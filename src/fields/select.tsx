@@ -24,7 +24,7 @@ export function SelectRender({ label, placeholder, options, multiple = false }: 
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
-      <SelectBase>
+      <SelectBase disabled>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

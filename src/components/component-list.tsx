@@ -6,6 +6,7 @@ import { ComponentRender } from './component-render'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import type { ComponentType } from '@/fields'
 import { cn } from '@/lib/utils'
+import { GroupDropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/group';
 
 type BaseDragData = {
     sourceType: 'base'
@@ -116,17 +117,18 @@ export function ComponentList({ parentId }: ComponentListProps) {
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto space-y-1">
-            {componentIds.map((id, index) => (
-                <ComponentWrapper
-                    key={id}
-                    componentId={id}
-                    parentId={parentId}
-                    index={index}
-                >
-                    <ComponentRender componentId={id} />
-                </ComponentWrapper>
-            ))}
-        </div>
+            <div className="w-full max-w-4xl mx-auto space-y-2">
+                {componentIds.map((id, index) => (
+                    <ComponentWrapper
+                        key={id}
+                        componentId={id}
+                        parentId={parentId}
+                        index={index}
+                    >
+                        <ComponentRender componentId={id} />
+                    </ComponentWrapper>
+                ))}
+            </div>
+
     )
 }

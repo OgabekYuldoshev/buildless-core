@@ -20,7 +20,7 @@ export function RadioRender({ label, options }: RadioProps) {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
-      <RadioGroup id={label}>
+      <RadioGroup id={label} disabled>
         {
           options.length === 0 ? (
             <RadioGroupItem value="placeholder" disabled>No options</RadioGroupItem>

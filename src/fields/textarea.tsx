@@ -21,7 +21,7 @@ export function TextareaRender({ label, placeholder, rows = 3 }: TextareaProps) 
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
-      <TextareaBase id={label} placeholder={placeholder} rows={rows} />
+      <TextareaBase id={label} placeholder={placeholder} rows={rows} disabled />
     </div>
   )
 }
