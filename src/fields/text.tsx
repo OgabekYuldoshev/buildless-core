@@ -9,3 +9,9 @@ export const Text: ComponentConfig<TextProps> = {
     content: "This is a text",
   },
 };
+
+export function TextRender({ content }: TextProps) {
+  return (
+    <p className="text-foreground">{content}</p>
+  )
+}

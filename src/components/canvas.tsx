@@ -3,6 +3,7 @@ import { useBuilder } from "@/hooks/use-builder"
 import { cn } from "@/lib/utils"
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import { useEffect, useRef, useState } from "react"
+import { ComponentList } from "./component-list"
 
 type BaseDraggableComponentData = {
     sourceType: 'base',
@@ -51,8 +52,8 @@ export function Canvas() {
     }
 
     return (
-        <main className="flex-1">
-            {JSON.stringify(state, null, 2)}
+        <main className="flex-1 p-8">
+            <ComponentList parentId={null} />
         </main>
     )
 }
