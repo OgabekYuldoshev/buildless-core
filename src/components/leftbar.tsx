@@ -1,4 +1,5 @@
 import { BaseDraggableComponent } from "./base-draggable-component";
+import { ComponentTree } from "./component-tree";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "./ui/sidebar";
 import { groupedComponents } from "@/fields";
 
@@ -21,6 +22,12 @@ export function Leftbar() {
                             </SidebarGroupContent>
                         </SidebarGroup>
                     ))}
+                <SidebarGroup>
+                    <SidebarGroupLabel>ComponentTree</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <ComponentTree />
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
         </Sidebar>
     )
