@@ -31,6 +31,20 @@ function EmptyDrop({ parentId }: EmptyDropProps) {
     const [isOver, setIsOver] = useState(false)
     const { insert, move, state } = useBuilder()
 
+    // Calculate depth of a component in the tree (0 = root level)
+    const calculateDepth = (parentId: ComponentId | null): number => {
+        if (parentId === null) return 0
+        let depth = 0
+        let currentParentId: ComponentId | null = parentId
+        while (currentParentId !== null) {
+            const parentNode: { parentId: ComponentId | null } | undefined = state[currentParentId]
+            if (!parentNode) break
+            depth++
+            currentParentId = parentNode.parentId
+        }
+        return depth
+    }
+
     useEffect(() => {
         const element = ref.current
         if (!element) return
@@ -40,6 +54,15 @@ function EmptyDrop({ parentId }: EmptyDropProps) {
             canDrop: ({ source }) => {
                 const data = source.data as DragData | undefined
                 if (!data) return false
+
+                // Calculate target depth (this list's parent depth)
+                const targetDepth = calculateDepth(parentId)
+                
+                // Maximum depth is 3 (0, 1, 2, 3), so if targetDepth is already 3,
+                // we cannot add more nested components
+                if (targetDepth >= 3) {
+                    return false
+                }
 
                 if (data.sourceType === 'base') {
                     return true

@@ -122,6 +122,20 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
         setClosestEdge(null)
     }, [])
 
+    // Calculate depth of a component in the tree (0 = root level)
+    const calculateDepth = useCallback((parentId: ComponentId | null): number => {
+        if (parentId === null) return 0
+        let depth = 0
+        let currentParentId: ComponentId | null = parentId
+        while (currentParentId !== null) {
+            const parentNode: { parentId: ComponentId | null } | undefined = state[currentParentId]
+            if (!parentNode) break
+            depth++
+            currentParentId = parentNode.parentId
+        }
+        return depth
+    }, [state])
+
     useEffect(() => {
         const element = elementRef.current
         if (!element) return
@@ -142,6 +156,15 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
                 canDrop({ source }) {
                     const data = source.data as DragData | undefined
                     if (!data) return false
+
+                    // Calculate target depth (this wrapper's parent depth + 1)
+                    const targetDepth = calculateDepth(parentId)
+                    
+                    // Maximum depth is 3 (0, 1, 2, 3), so if targetDepth is already 3,
+                    // we cannot add more nested components
+                    if (targetDepth >= 3) {
+                        return false
+                    }
 
                     if (data.sourceType === 'base') {
                         return true
@@ -184,12 +207,19 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
                 onDragEnter: handleDropIndicatorChange,
                 onDrag: handleDropIndicatorChange,
                 onDragLeave: handleDragLeave,
-                onDrop({ source, location }) {
+                onDrop({ source, location, self }) {
                     setClosestEdge(null)
 
+                    // Same innermost-guard as in canDrop: if this wrapper is
+                    // not the innermost target, we let the inner target
+                    // handle the drop (to avoid double inserts).
+                    const innerMost = location.current.dropTargets[0]
+                    if (!innerMost || innerMost.element !== self.element) {
+                        return
+                    }
+
                     const sourceData = source.data as DragData
-                    const target = location.current.dropTargets[0]
-                    if (!target) return
+                    const target = innerMost
 
                     const targetData = target.data as TargetData
                     const edge = extractClosestEdge(targetData)
