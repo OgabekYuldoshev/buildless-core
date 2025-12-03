@@ -58,6 +58,7 @@ export function useBuilder() {
       insert: builder.insert.bind(builder),
       update: builder.update.bind(builder),
       remove: builder.remove.bind(builder),
+      move: builder.move.bind(builder),
     }),
     [state, builder]
   );

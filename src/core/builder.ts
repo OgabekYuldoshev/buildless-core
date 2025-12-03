@@ -67,6 +67,54 @@ export class Builder<
       .map((node) => node.id);
   }
 
+  public move(options: {
+    id: ComponentId;
+    parentId: ComponentId | null;
+    index: number;
+  }) {
+    const { id, parentId, index } = options;
+
+    const node = this.nodes.get(id);
+
+    if (!node) {
+      throw new Error(`Node with id ${id} not found`);
+    }
+
+    if (parentId !== null) {
+      if (!this.nodes.has(parentId)) {
+        throw new Error(`Parent node with id ${parentId} not found`);
+      }
+
+      const parentNode = this.nodes.get(parentId);
+
+      if (parentNode && !this.registry.canHaveChildren(parentNode.type)) {
+        throw new Error(
+          `Cannot move: Node type "${parentNode.type}" cannot have children`
+        );
+      }
+    }
+
+    const nodeIds = parentId
+      ? this.getChildrenNodes(parentId)
+      : this.getRootNodes();
+
+    const filteredNodeIds = nodeIds.filter((nodeId) => nodeId !== id);
+
+    validateNodeIndex(index, filteredNodeIds.length);
+
+    const position = calculateNodePosition(
+      this.nodes,
+      filteredNodeIds,
+      index
+    );
+
+    node.parentId = parentId;
+    node.position = position;
+
+    this.nodes.set(id, node);
+    this.emitChanges();
+  }
+
   public insert<Type extends GetComponentType<Config>>(options: {
     type: Type;
     index: number;

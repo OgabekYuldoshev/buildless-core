@@ -3,9 +3,10 @@ import { ExpandIcon } from "lucide-react"
 import { SidebarMenuButton } from "./ui/sidebar"
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import type { ComponentType } from '@/fields'
 
 interface BaseDraggableComponentProps {
-    type: string
+    type: ComponentType
 }
 export function BaseDraggableComponent({ type }: BaseDraggableComponentProps) {
     const elementRef = useRef<HTMLButtonElement>(null)
