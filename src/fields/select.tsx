@@ -23,7 +23,7 @@ export const Select: ComponentConfig<SelectProps> = {
 export function SelectRender({ label, placeholder, options, multiple = false }: SelectProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Label htmlFor={label}>{label}</Label>
+      <Label htmlFor={label}>{label} {multiple ? "(Multiple)" : ""}</Label>
       <SelectBase disabled>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />

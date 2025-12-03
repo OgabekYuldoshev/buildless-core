@@ -6,7 +6,6 @@ import { ComponentRender } from './component-render'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import type { ComponentType } from '@/fields'
 import { cn } from '@/lib/utils'
-import { GroupDropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/group';
 
 type BaseDragData = {
     sourceType: 'base'
