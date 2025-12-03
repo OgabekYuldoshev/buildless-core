@@ -53,12 +53,12 @@ export function Canvas() {
                 }
             },
         })
-    }, [rootIds])
+    }, [rootIds, insert])
 
     if (rootIds.length === 0) {
         return (
             <main 
-                ref={elementRef} 
+                ref={elementRef}
                 className={cn(
                     "flex-1 flex items-center justify-center transition-all duration-150",
                     isOver 
@@ -100,7 +100,10 @@ export function Canvas() {
     }
 
     return (
-        <main className="flex-1 p-8 flex flex-col gap-6">
+        <main 
+            ref={elementRef}
+            className="flex-1 p-8 flex flex-col gap-6"
+        >
             <div className="flex-1">
                 <ComponentList parentId={null} />
             </div>

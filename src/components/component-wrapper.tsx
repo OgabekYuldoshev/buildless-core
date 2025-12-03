@@ -1,8 +1,7 @@
 import type { ComponentId } from '@/core'
 import { useBuilder } from '@/hooks/use-builder'
+import { useSelection } from '@/hooks/use-selection'
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button } from './ui/button'
-import { GripHorizontalIcon } from 'lucide-react'
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine'
 import {
     draggable,
@@ -53,10 +52,12 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
     children,
 }: ComponentWrapperProps) {
     const { state, rootIds, childrenIds, insert, move } = useBuilder()
+    const { selectedId, select } = useSelection()
     const elementRef = useRef<HTMLDivElement>(null)
     const [isDragging, setIsDragging] = useState(false)
     const [closestEdge, setClosestEdge] = useState<Edge | null>(null)
     const [isHovered, setIsHovered] = useState(false)
+    const isSelected = selectedId === componentId
 
     const dragData = useMemo<NodeDragData>(
         () => ({
@@ -175,6 +176,22 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
             }
         }
     }, [])
+
+    const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        // Don't select if currently dragging
+        if (isDragging) return
+        
+        // Prevent selection when clicking on drag handle or nested components
+        const target = e.target as HTMLElement
+        const isDragHandle = target.closest('[data-drag-handle]')
+        const nestedWrapper = target.closest('[data-component-wrapper]')
+        
+        // Only select if clicking directly on this wrapper, not nested ones
+        if (nestedWrapper === elementRef.current && !isDragHandle) {
+            e.stopPropagation()
+            select(componentId)
+        }
+    }, [componentId, select, isDragging])
 
     // Calculate depth of a component in the tree (0 = root level)
     const calculateDepth = useCallback((parentId: ComponentId | null): number => {
@@ -370,10 +387,12 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
             onMouseEnter={handleMouseEnter}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
             className={cn(
                 "border p-4 rounded-lg gap-3 bg-background cursor-grab transition-shadow relative",
                 isHovered && !isDragging && "ring-2 ring-primary/60",
-                isDragging && "shadow-lg ring-2 ring-primary/60 opacity-80"
+                isDragging && "shadow-lg ring-2 ring-primary/60 opacity-80",
+                isSelected && !isDragging && "ring-2 ring-primary border-primary"
             )}
         >
             {children}

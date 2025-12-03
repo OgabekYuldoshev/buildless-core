@@ -22,10 +22,20 @@ export function CheckboxRender({ label, options }: CheckboxProps) {
       <Label htmlFor={label}>{label}</Label>
       <div className="flex flex-col gap-2 flex-wrap">
         {options.length === 0 ? (
-          <CheckboxBase value="placeholder" disabled>No options</CheckboxBase>
+          <div className="flex items-center space-x-2">
+            <CheckboxBase value="placeholder" disabled />
+            <Label htmlFor="placeholder" className="text-sm font-normal text-muted-foreground">
+              No options
+            </Label>
+          </div>
         ) : (
           options.map((option) => (
-            <CheckboxBase key={option.value} value={option.value} disabled >{option.label}</CheckboxBase>
+            <div key={option.value} className="flex items-center space-x-2">
+              <CheckboxBase value={option.value} disabled />
+              <Label htmlFor={option.value} className="text-sm font-normal cursor-not-allowed">
+                {option.label}
+              </Label>
+            </div>
           ))
         )}
       </div>
