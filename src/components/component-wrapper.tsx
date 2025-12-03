@@ -16,7 +16,7 @@ import {
 } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
 import DropIndicator from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box'
 import { cn } from '@/lib/utils'
-import { ComponentList } from './component-list'
+
 import type { ComponentType } from '@/fields'
 
 type BaseDragData = {
@@ -53,7 +53,6 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
     children,
 }: ComponentWrapperProps) {
     const { state, rootIds, childrenIds, insert, move } = useBuilder()
-    const componentNode = state[componentId]
     const elementRef = useRef<HTMLDivElement>(null)
     const [isDragging, setIsDragging] = useState(false)
     const [closestEdge, setClosestEdge] = useState<Edge | null>(null)
@@ -296,11 +295,6 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
                     {children}
                 </div>
             </div>
-            {componentNode?.type === 'Group' && (
-                <div className="mt-2 pl-4 border-l border-dashed space-y-1">
-                    <ComponentList parentId={componentId} />
-                </div>
-            )}
             {closestEdge && (
                 <DropIndicator
                     edge={closestEdge}

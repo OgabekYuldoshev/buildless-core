@@ -30,5 +30,5 @@ export function ComponentRender({ componentId }: ComponentRenderProps) {
     } as Record<ComponentType, (props: any) => JSX.Element>
 
     const RenderComponent = renderComponents[componentNode.type]
-    return <RenderComponent {...componentNode.props} />
+    return <RenderComponent componentId={componentId} {...componentNode.props} />
 }
