@@ -3,8 +3,17 @@ import { useBuilder } from "@/hooks/use-builder"
 import { cn } from "@/lib/utils"
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import { useEffect, useRef, useState } from "react"
-import { Layout, ArrowDown } from "lucide-react"
+import { Layout, ArrowDown, Code2 } from "lucide-react"
 import { ComponentList } from "./component-list"
+import { StateViewer } from "./state-viewer"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog"
+import { Button } from "./ui/button"
 
 type BaseDraggableComponentData = {
     sourceType: 'base',
@@ -14,7 +23,7 @@ type BaseDraggableComponentData = {
 export function Canvas() {
     const [isOver, setIsOver] = useState(false)
     const elementRef = useRef<HTMLDivElement>(null)
-    const { rootIds, state, insert } = useBuilder()
+    const { rootIds, insert } = useBuilder()
 
     useEffect(() => {
         const element = elementRef.current
@@ -91,8 +100,26 @@ export function Canvas() {
     }
 
     return (
-        <main className="flex-1 p-8">
-            <ComponentList parentId={null} />
+        <main className="flex-1 p-8 flex flex-col gap-6">
+            <div className="flex-1">
+                <ComponentList parentId={null} />
+            </div>
+            <div className="flex items-center justify-end border-t pt-4">
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="gap-2">
+                            <Code2 className="w-4 h-4" />
+                            View State (JSON)
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh]">
+                        <DialogHeader>
+                            <DialogTitle>Builder State (JSON)</DialogTitle>
+                        </DialogHeader>
+                        <StateViewer />
+                    </DialogContent>
+                </Dialog>
+            </div>
         </main>
     )
 }
