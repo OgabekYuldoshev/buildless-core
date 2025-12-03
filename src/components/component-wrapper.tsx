@@ -56,6 +56,7 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
     const elementRef = useRef<HTMLDivElement>(null)
     const [isDragging, setIsDragging] = useState(false)
     const [closestEdge, setClosestEdge] = useState<Edge | null>(null)
+    const [isHovered, setIsHovered] = useState(false)
 
     const dragData = useMemo<NodeDragData>(
         () => ({
@@ -120,6 +121,59 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
 
     const handleDragLeave = useCallback(() => {
         setClosestEdge(null)
+    }, [])
+
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLElement
+        const currentTarget = e.currentTarget as HTMLElement
+        
+        // Find the closest ComponentWrapper from the target
+        const nestedWrapper = target.closest('[data-component-wrapper]') as HTMLElement
+        
+        // Only set hover if the nested wrapper is this element itself
+        // If target is inside a different ComponentWrapper, don't hover this one
+        if (nestedWrapper === currentTarget) {
+            setIsHovered(true)
+        } else if (nestedWrapper && nestedWrapper !== currentTarget) {
+            // Mouse is over a nested ComponentWrapper, so don't hover parent
+            setIsHovered(false)
+        } else {
+            // Target is not a ComponentWrapper, so hover this element
+            setIsHovered(true)
+        }
+    }, [])
+
+    const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLElement
+        const currentTarget = e.currentTarget as HTMLElement
+        
+        // Find the closest ComponentWrapper from the target
+        const nestedWrapper = target.closest('[data-component-wrapper]') as HTMLElement
+        
+        // Only set hover if entering this element directly (not from a nested wrapper)
+        if (nestedWrapper === currentTarget || !nestedWrapper) {
+            const relatedTarget = e.relatedTarget as Node | null
+            // Only set hover if coming from outside
+            if (!relatedTarget || !currentTarget.contains(relatedTarget)) {
+                setIsHovered(true)
+            }
+        }
+    }, [])
+
+    const handleMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const relatedTarget = e.relatedTarget as Node | null
+        const currentTarget = e.currentTarget as HTMLElement
+        
+        // Clear hover if leaving to outside
+        if (!relatedTarget || !currentTarget.contains(relatedTarget)) {
+            setIsHovered(false)
+        } else {
+            // If going to a nested ComponentWrapper, clear hover
+            const nestedWrapper = (relatedTarget as Element)?.closest?.('[data-component-wrapper]') as HTMLElement
+            if (nestedWrapper && nestedWrapper !== currentTarget) {
+                setIsHovered(false)
+            }
+        }
     }, [])
 
     // Calculate depth of a component in the tree (0 = root level)
@@ -312,8 +366,13 @@ export const ComponentWrapper = memo(function ComponentWrapperInternal({
     return (
         <div
             ref={elementRef}
+            data-component-wrapper
+            onMouseEnter={handleMouseEnter}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             className={cn(
-                "border p-4 rounded-lg gap-3 bg-background cursor-grab transition-shadow relative hover:ring-2 hover:ring-primary/60",
+                "border p-4 rounded-lg gap-3 bg-background cursor-grab transition-shadow relative",
+                isHovered && !isDragging && "ring-2 ring-primary/60",
                 isDragging && "shadow-lg ring-2 ring-primary/60 opacity-80"
             )}
         >
