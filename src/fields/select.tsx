@@ -25,13 +25,17 @@ export function SelectRender({ label, placeholder, options, multiple = false }: 
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
       <SelectBase>
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-          ))}
+          {options.length === 0 ? (
+            <SelectItem value="placeholder" disabled>No options</SelectItem>
+          ) : (
+            options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+            ))
+          )}
         </SelectContent>
       </SelectBase>
     </div>

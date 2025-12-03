@@ -13,7 +13,7 @@ export function ComponentWrapper({ componentId, children }: ComponentWrapperProp
     const componentNode = state[componentId]
     return (
         <div className="border p-4 rounded-lg flex items-start gap-4">
-            <Button size="icon-sm" variant="ghost" className='shrink-0'>
+            <Button size="icon-sm" variant="outline" className='shrink-0'>
                 <GripHorizontalIcon />
             </Button>
             <div className='flex-1'>

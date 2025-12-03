@@ -21,9 +21,15 @@ export function RadioRender({ label, options }: RadioProps) {
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
       <RadioGroup id={label}>
-        {options.map((option) => (
-          <RadioGroupItem key={option.value} value={option.value}>{option.label}</RadioGroupItem>
-        ))}
+        {
+          options.length === 0 ? (
+            <RadioGroupItem value="placeholder" disabled>No options</RadioGroupItem>
+          ) : (
+            options.map((option) => (
+              <RadioGroupItem key={option.value} value={option.value}>{option.label}</RadioGroupItem>
+            ))
+          )
+        }
       </RadioGroup>
     </div>
   )

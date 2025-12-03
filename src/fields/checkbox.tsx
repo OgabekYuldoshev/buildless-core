@@ -21,9 +21,13 @@ export function CheckboxRender({ label, options }: CheckboxProps) {
     <div className="flex flex-col gap-2">
       <Label htmlFor={label}>{label}</Label>
       <div className="flex flex-col gap-2 flex-wrap">
-        {options.map((option) => (
-          <CheckboxBase key={option.value} value={option.value}>{option.label}</CheckboxBase>
-        ))}
+        {options.length === 0 ? (
+          <CheckboxBase value="placeholder" disabled>No options</CheckboxBase>
+        ) : (
+          options.map((option) => (
+            <CheckboxBase key={option.value} value={option.value}>{option.label}</CheckboxBase>
+          ))
+        )}
       </div>
     </div>
   )
