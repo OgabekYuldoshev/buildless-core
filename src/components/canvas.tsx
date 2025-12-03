@@ -3,6 +3,7 @@ import { useBuilder } from "@/hooks/use-builder"
 import { cn } from "@/lib/utils"
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
 import { useEffect, useRef, useState } from "react"
+import { Layout, ArrowDown } from "lucide-react"
 import { ComponentList } from "./component-list"
 
 type BaseDraggableComponentData = {
@@ -47,7 +48,45 @@ export function Canvas() {
 
     if (rootIds.length === 0) {
         return (
-            <main ref={elementRef} className={cn("flex-1", isOver && 'bg-muted')}>Canvas</main>
+            <main 
+                ref={elementRef} 
+                className={cn(
+                    "flex-1 flex items-center justify-center transition-all duration-150",
+                    isOver 
+                        ? "bg-muted border-2 border-dashed border-primary" 
+                        : "bg-background"
+                )}
+            >
+                <div className={cn(
+                    "flex flex-col items-center justify-center gap-4 text-center px-8 py-12 transition-all duration-150",
+                    isOver && "scale-105"
+                )}>
+                    <div className={cn(
+                        "relative p-6 rounded-full transition-all duration-150",
+                        isOver 
+                            ? "bg-primary/10 text-primary" 
+                            : "bg-muted text-muted-foreground"
+                    )}>
+                        <Layout className="w-12 h-12" />
+                        {isOver && (
+                            <ArrowDown className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 text-primary animate-bounce" />
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <h3 className={cn(
+                            "text-xl font-semibold transition-colors duration-150",
+                            isOver ? "text-primary" : "text-foreground"
+                        )}>
+                            {isOver ? "Drop component here" : "Empty Canvas"}
+                        </h3>
+                        <p className="text-sm text-muted-foreground max-w-md">
+                            {isOver 
+                                ? "Release to add your first component" 
+                                : "Drag a component from the sidebar to get started"}
+                        </p>
+                    </div>
+                </div>
+            </main>
         )
     }
 
