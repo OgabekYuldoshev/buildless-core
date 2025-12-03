@@ -185,7 +185,7 @@ export class Builder<
     this.emitChanges();
   }
 
-  public subscribe = (listener: Listener<Config>) => {
+  public subscribe(listener: Listener<Config>){
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
   };

@@ -29,7 +29,7 @@ export class Registry<
 
   public getComponentConfig<T extends ComponentType>(type: T) {
     const config = this.registry.get(type);
-
+    
     if (!config) {
       throw new Error(`Component config not found for type: ${type}`);
     }
